@@ -11,6 +11,11 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 '''
 Fixing directory paths for training and testing data
+To retrain:
+    - Create the directory structure mentioned below.
+    - Add training and testing data from the link provided in README file
+    - Move 15 images from individual training folders to respective testing folders
+    
 '''
 
 data_dir = './data'
