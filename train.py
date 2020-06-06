@@ -114,13 +114,13 @@ class Model:
 
         model_path = "./model"
         model_json_path = "./model/model-desc.json"
-        checkpoint_path = "./model/checkpoints/"
+        checkpoint_path = "./model/model-bst.h5"
 
         checkpoint_dir = os.path.dirname(checkpoint_path)
 
         cp_callback = ks.callbacks.ModelCheckpoint(
             filepath=checkpoint_path,
-            save_weights_only=True,
+            # save_best_only=True,
             verbose=0
         )
 
@@ -135,7 +135,6 @@ class Model:
         with open(model_json_path, "w") as json_file:
             json_file.write(model_json)
 
-        model.save_weights(model_path + "model-weights.h5")
         return history
 
     '''
