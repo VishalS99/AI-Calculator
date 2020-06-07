@@ -24,11 +24,11 @@ class Model:
 
         train_datagen = ImageDataGenerator(
             rescale=1./255,
-            width_shift_range=0.2,
-            height_shift_range=0.2,
+            rotation_range=5,
+            width_shift_range=0.1,
+            height_shift_range=0.1,
             shear_range=0.2,
             zoom_range=0.2,
-            # horizontal_flip=True,
             fill_mode='nearest'
         )
         test_datagen = ImageDataGenerator(
@@ -38,14 +38,14 @@ class Model:
         training_gen = train_datagen.flow_from_directory(
             self.train,
             target_size=(128, 128),
-            batch_size=50,
+            batch_size=30,
             class_mode='categorical',
             shuffle=True)
 
         validation_gen = test_datagen.flow_from_directory(
             self.valid,
             target_size=(128, 128),
-            batch_size=50,
+            batch_size=30,
             class_mode='categorical')
 
         return (training_gen, validation_gen)
@@ -67,7 +67,7 @@ class Model:
 
     The model uses:
         - loss: Categorical CrossEntropy loss
-        - optimizer: SGD with lr = 1E-2 and momentum of 0.9
+        - optimizer: Adam with lr = 1E-3 and decay of 1E-5
         - metric: Accuracy
     '''
 
@@ -90,6 +90,7 @@ class Model:
 
         model.add(Flatten())
         model.add(Dense(128, activation='relu'))
+        model.add(Dropout(0.3))
         model.add(Dense(16, activation='softmax',
                         kernel_regularizer=ks.regularizers.l1(1e-3)))
 
@@ -108,7 +109,7 @@ class Model:
         model.summary()
         model.compile(
             loss="categorical_crossentropy",
-            optimizer=ks.optimizers.SGD(lr=0.01, momentum=0.9),
+            optimizer=ks.optimizers.Adam(lr=1e-3, decay=1e-5),
             metrics=['accuracy']
         )
 
