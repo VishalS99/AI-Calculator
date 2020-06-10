@@ -14,6 +14,11 @@ class Model:
     def __init__(self, training_path="./data/train", validation_path="./data/test"):
         self.train = training_path
         self.valid = validation_path
+        self.regularizer = 1e-3
+        self.loss = "categorical_crossentropy"
+        self.olr = 1e-3
+        self.decay = 1e-5
+        
 
     '''
     Creating image generator for both training and validation data
@@ -92,7 +97,7 @@ class Model:
         model.add(Dense(128, activation='relu'))
         model.add(Dropout(0.3))
         model.add(Dense(16, activation='softmax',
-                        kernel_regularizer=ks.regularizers.l1(1e-3)))
+                        kernel_regularizer=ks.regularizers.l1(self.regularizer)))
 
         return model
 
@@ -108,8 +113,8 @@ class Model:
         model = self.get_cnn()
         model.summary()
         model.compile(
-            loss="categorical_crossentropy",
-            optimizer=ks.optimizers.Adam(lr=1e-3, decay=1e-5),
+            loss=self.loss,
+            optimizer=ks.optimizers.Adam(lr=self.olr, decay=self.decay),
             metrics=['accuracy']
         )
 
